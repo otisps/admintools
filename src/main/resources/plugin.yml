@@ -1,0 +1,10 @@
+name: Otisadmintools
+version: '${project.version}'
+main: technology.otis.otisadmintools.Otisadmintools
+api-version: 1.18
+authors: [ otisps ]
+description: admin tools for use on my development server
+commands:
+  warp:
+    description: lets you warp to a location
+    usage: /warp location

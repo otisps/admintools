@@ -1,0 +1,7 @@
+
+database:
+  host: # Connection link to your database server
+  port: # Port for the same database server
+  database: # Name of the database on that server
+  user:
+  password:
