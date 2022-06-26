@@ -1,5 +1,6 @@
 package technology.otis.otisadmintools.db;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -14,20 +15,33 @@ public class Database {
      * @param plugin the main class
      * @return a connection.
      */
-    public Connection getConnection(Plugin plugin){
+    public Connection getConnection(final Plugin plugin){
         FileConfiguration config = plugin.getConfig();
-        String url = config.getString("database.host");
-        String user = config.getString("database.username");
-        String password = config.getString("database.password");
         try {
-            Connection newConnection = DriverManager.getConnection(url, user, password);
-            plugin.getLogger().info("Successfully connect Otis' Admin Tools to the database.");
-            return newConnection;
-
+            if(Otisadmintools.getConnection() != null && Otisadmintools.getConnection().isValid(1)){
+                return Otisadmintools.getConnection();
+            }
         } catch (SQLException e) {
-            plugin.getLogger().info("Otis Admin Tools wasn't able to connect to a database.");
             throw new RuntimeException(e);
         }
+        final String url = config.getString("database.host");
+        final String user = config.getString("database.username");
+        final String password = config.getString("database.password");
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Connection newConnection = DriverManager.getConnection(url, user, password);
+                    plugin.getLogger().info("Successfully connect Otis' Admin Tools to the database.");
+                    Otisadmintools.setConnection(newConnection);
+
+                } catch (SQLException e) {
+                    plugin.getLogger().info("Otis Admin Tools wasn't able to connect to a database.");
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return Otisadmintools.getConnection();
     }
 
     /**

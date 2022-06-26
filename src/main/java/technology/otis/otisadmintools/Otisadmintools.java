@@ -10,6 +10,8 @@ import java.sql.Connection;
 public final class Otisadmintools extends JavaPlugin {
 
     private static Otisadmintools instance;
+    private static Connection connection;
+
 
     @Override
     public void onEnable() {
@@ -21,6 +23,7 @@ public final class Otisadmintools extends JavaPlugin {
         database.initalizeDatabase();
         getServer().getPluginCommand("warp").setExecutor(new WarpCommand());
     }
+
     @Override
     public void onDisable() {
     }
@@ -28,4 +31,12 @@ public final class Otisadmintools extends JavaPlugin {
     public static Otisadmintools getInstance() {
         return instance;
     }
+
+    public static Connection getConnection() {
+        return connection;
     }
+
+    public static void setConnection(Connection connection) {
+        Otisadmintools.connection = connection;
+    }
+}
